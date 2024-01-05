@@ -1,0 +1,35 @@
+service: apisls
+frameworkVersion: '3'
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  memorySize: 128
+
+package:
+  individually: true
+
+custom:
+  esbuild:
+    target: node20
+    format: esm
+    minify: true
+    outputFileExtension: .mjs
+
+functions:
+  hello:
+    handler: src/functions/hello.handler
+    events:
+      - httpApi:
+          path: /
+          method: GET
+  user:
+    handler: src/functions/getUserByID.handler
+    events:
+      - httpApi:
+          path: /users/{userId}
+          method: GET
